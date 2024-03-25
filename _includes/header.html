@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Navbar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .custom-navbar {
+            background-color: #1e468f;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{site.baseurl}}/">Real Estate</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- Check if JWT token exists -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{site.baseurl}}/houses">Houses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{site.baseurl}}/aibot">AI Real Estate Bot</a>
+                </li>
+                <!--<li class="maps-item">
+                    <a class="nav-link" href="{{site.baseurl}}/maps">Maps</a>
+                </li>!-->
+                <li class="nav-item">
+                    <a id="favoriteLink" class="nav-link" href="{{site.baseurl}}/favorites">Favorites</a>
+                </li>    
+                <li class="nav-item">
+                    <!-- Check if JWT token exists and show the appropriate link -->
+                    <a id="editUserLink" class="nav-link" href="{{site.baseurl}}/edituser">Edit User</a>
+                </li>
+                <li class="nav-item">
+                    <!-- Check if JWT token exists and show the appropriate link -->
+                    <a id="deleteUserLink" class="nav-link" href="{{site.baseurl}}/deleteUser" style="display: none;">Delete User</a>
+                </li>
+                <li class="nav-item">
+                    <!-- Check if JWT token exists and show the appropriate link -->
+                    <a id="databaseLink" class="nav-link" href="{{site.baseurl}}/database" style="display: none;">Database</a>
+                </li>
+                <li class="nav-item">
+                    <!-- Check if JWT token exists and show the appropriate link -->
+                    <a id="logoutLink" class="nav-link" href="#">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Function to check if JWT token exists
+    function checkJWTToken() {
+        const jwtToken = document.cookie.split(';').find(cookie => cookie.trim().startsWith('jwt='));
+        return jwtToken !== null && jwtToken !== undefined;
+    }
+
+    // Function to handle logout
+    function handleLogout(event) {
+        // Prevent the default anchor tag behavior
+        event.preventDefault();
+        // Delete JWT token from localStorage
+        localStorage.removeItem('jwt');
+        // Delete JWT token from cookies
+        document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // Redirect to the login page
+        // Remove the logout link from the DOM
+        window.location.href = "{{site.baseurl}}/login";
+    }
+
+    // Function to initialize the navbar based on JWT token existence
+    function initializeNavbar() {
+        const logoutLink = document.getElementById('logoutLink');
+        const favoriteLink = document.getElementById('favoriteLink');
+        const editUserLink = document.getElementById('editUserLink');
+        const deleteUserLink = document.getElementById('deleteUserLink');
+        const databaseLink = document.getElementById('databaseLink');
+        // Check if JWT token exists
+        if (checkJWTToken()) {
+            // If JWT token exists, show the logout link
+            logoutLink.style.display = 'block'; // No need for !important here
+            // Attach logout event listener
+            logoutLink.addEventListener('click', handleLogout);
+
+            // Check if user is admin
+            const jwtToken = document.cookie.split(';').find(cookie => cookie.trim().startsWith('jwt='));
+            const payload = JSON.parse(atob(jwtToken.split('.')[1]));
+            if (payload.role === 'Admin') {
+                deleteUserLink.style.display = 'block'; // Show delete user link
+                databaseLink.style.display = 'block'; // Show database link
+            } else {
+                deleteUserLink.style.display = 'none'; // Hide delete user link
+                databaseLink.style.display = 'none'; // Hide database link
+            }
+        } else {
+            // If JWT token does not exist, hide the logout link
+            logoutLink.style.display = 'none';
+            favoriteLink.style.display = 'none';
+            editUserLink.style.display = 'none';
+            deleteUserLink.style.display = 'none'; // Hide delete user link
+            databaseLink.style.display = 'none'; // Hide database link
+        }
+    }
+
+    // Call the initializeNavbar function when the DOM content is loaded
+    document.addEventListener('DOMContentLoaded', initializeNavbar);
+</script>
+
+</body>
+</html>
