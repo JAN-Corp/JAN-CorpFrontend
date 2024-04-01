@@ -6,3 +6,4 @@ title: Salary Quiz
 
 <button onclick="location.href='{{site.baseurl}}/houses'" type="button">
          Find Your House</button>
+         
