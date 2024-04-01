@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Real Esate Analyzation
+title: Real Esate Analyzations
 permalinl: /
 ---
 
