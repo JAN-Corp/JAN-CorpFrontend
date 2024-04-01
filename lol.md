@@ -4,5 +4,5 @@ title: Salary Quiz
 ---
 ## Insert Quiz Here
 
-<button onclick="location.href='http://127.0.0.1:4200/houses/'" type="button">
+<button onclick="location.href='{{site.baseurl}}/houses'" type="button">
          Find Your House</button>

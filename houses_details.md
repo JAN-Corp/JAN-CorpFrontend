@@ -10,7 +10,7 @@ title: House Details
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>House Info</title>
     <style>
-        /* Your existing styles */ a
+        /* Your existing styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
