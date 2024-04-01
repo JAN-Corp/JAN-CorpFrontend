@@ -125,7 +125,8 @@ The script defines a function when the page loads. This function is triggered wh
             // Success!!!
             // Redirect to the database page
             localStorage.setItem('uid', document.getElementById("uid").value);
-            window.location.href = "{{site.baseurl}}/";
+            window.location.href = "http://127.0.0.1:4200/salarychek"
+            // window.location.href = "{{site.baseurl}}/";
         })
         // catch fetch errors (ie ACCESS to server blocked)
         .catch(err => {
