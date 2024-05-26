@@ -51,6 +51,7 @@ title: houses
             border-radius: 20px;
             padding: 10px 20px;
             font-size: 16px;
+            margin-right: 10px;
         }
         .house-btn-primary:hover {
             background-color: #48a2ca;
@@ -67,6 +68,12 @@ title: houses
 <div class="container house-container">
     <h1 class="house-h1">Explore Properties</h1>
     <input type="text" id="search-bar" class="form-control house-search-bar" placeholder="Search by address">
+    <div class="d-flex mb-4">
+        <button id="sort-asc-price-button" class="btn house-btn-primary">Sort by Price (Ascending)</button>
+        <button id="sort-desc-price-button" class="btn house-btn-primary">Sort by Price (Descending)</button>
+        <button id="sort-asc-alpha-button" class="btn house-btn-primary">Sort by Address (A-Z)</button>
+        <button id="sort-desc-alpha-button" class="btn house-btn-primary">Sort by Address (Z-A)</button>
+    </div>
     <div class="row" id="house-cards"></div>
 </div>
 
@@ -97,12 +104,12 @@ title: houses
 
     // Your existing JavaScript code for fetching and rendering houses data
     document.addEventListener('DOMContentLoaded', () => {
-        // Your existing JavaScript code for fetching and rendering houses data
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
         const houseCardsContainer = document.getElementById('house-cards');
         const searchBar = document.getElementById('search-bar');
+        const sortAscPriceButton = document.getElementById('sort-asc-price-button');
+        const sortDescPriceButton = document.getElementById('sort-desc-price-button');
+        const sortAscAlphaButton = document.getElementById('sort-asc-alpha-button');
+        const sortDescAlphaButton = document.getElementById('sort-desc-alpha-button');
         const placeholderImageUrl = 'https://www.avantistones.com/images/noImage.png';
         let housesData = [];
 
@@ -169,8 +176,36 @@ title: houses
             renderHouses(filteredHouses);
         }
 
+        function bubbleSort(arr, key, ascending = true) {
+            let len = arr.length;
+            for (let i = 0; i < len; i++) {
+                for (let j = 0; j < len - 1 - i; j++) {
+                    if (ascending ? arr[j][key] > arr[j + 1][key] : arr[j][key] < arr[j + 1][key]) {
+                        let temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
+                }
+            }
+            return arr;
+        }
+
+        function sortHousesByPrice(ascending) {
+            const sortedHouses = bubbleSort([...housesData], 'price', ascending);
+            renderHouses(sortedHouses);
+        }
+
+        function sortHousesByAddress(ascending) {
+            const sortedHouses = bubbleSort([...housesData], 'address', ascending);
+            renderHouses(sortedHouses);
+        }
+
         fetchData();
         searchBar.addEventListener('input', filterHouses);
+        sortAscPriceButton.addEventListener('click', () => sortHousesByPrice(true));
+        sortDescPriceButton.addEventListener('click', () => sortHousesByPrice(false));
+        sortAscAlphaButton.addEventListener('click', () => sortHousesByAddress(true));
+        sortDescAlphaButton.addEventListener('click', () => sortHousesByAddress(false));
     });
 </script>
 
